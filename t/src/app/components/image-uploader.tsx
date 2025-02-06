@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { Upload, Camera, X } from "lucide-react"
 
 export function ImageUploader({ onClose }: { onClose: () => void }) {
@@ -93,27 +92,40 @@ export function ImageUploader({ onClose }: { onClose: () => void }) {
         )}
 
         <div className="flex justify-center space-x-4 mb-4">
-          <Button onClick={() => fileInputRef.current?.click()}>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center px-6 py-2 text-base font-medium text-white bg-pink-600 border border-transparent rounded-md hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+          >
             <Upload className="h-5 w-5 mr-2" />
             Upload
-          </Button>
+          </button>
           <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="image/*" className="hidden" />
-          <Button onClick={handleCapture}>
+          <button
+            onClick={handleCapture}
+            className="inline-flex items-center px-6 py-2 text-base font-medium text-white bg-pink-600 border border-transparent rounded-md hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+          >
             <Camera className="h-5 w-5 mr-2" />
             {isCaptureMode ? "Capture" : "Camera"}
-          </Button>
+          </button>
         </div>
 
         {image && (
           <div className="flex justify-end space-x-4">
-            <Button variant="outline" onClick={() => setImage(null)}>
+            <button
+              onClick={() => setImage(null)}
+              className="inline-flex items-center px-6 py-2 text-base font-medium text-pink-600 bg-white border border-pink-600 rounded-md hover:bg-pink-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+            >
               Back
-            </Button>
-            <Button onClick={handleContinue}>Continue</Button>
+            </button>
+            <button
+              onClick={handleContinue}
+              className="inline-flex items-center px-6 py-2 text-base font-medium text-white bg-pink-600 border border-transparent rounded-md hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+            >
+              Continue
+            </button>
           </div>
         )}
       </motion.div>
     </motion.div>
   )
 }
-

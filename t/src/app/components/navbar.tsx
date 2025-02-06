@@ -2,9 +2,8 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Menu } from "lucide-react"
-import type React from "react" // Added import for React
+import type React from "react"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,14 +24,14 @@ export function Navbar() {
             <NavLink href="/blog">Blog</NavLink>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <Button asChild>
+            <CustomButton>
               <Link href="/login">Login</Link>
-            </Button>
+            </CustomButton>
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
-            <Button variant="ghost" onClick={() => setIsOpen(!isOpen)}>
+            <CustomButton variant="ghost" onClick={() => setIsOpen(!isOpen)}>
               <Menu className="h-6 w-6" />
-            </Button>
+            </CustomButton>
           </div>
         </div>
       </div>
@@ -78,3 +77,25 @@ function MobileNavLink({ href, children }: { href: string; children: React.React
   )
 }
 
+function CustomButton({
+  children,
+  variant = "filled",
+  onClick,
+}: {
+  children: React.ReactNode
+  variant?: "filled" | "ghost"
+  onClick?: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`${
+        variant === "filled"
+          ? "bg-pink-600 text-white hover:bg-pink-700"
+          : "bg-transparent text-pink-600 hover:bg-gray-100"
+      } px-4 py-2 rounded-md text-sm font-medium transition duration-300`}
+    >
+      {children}
+    </button>
+  )
+}

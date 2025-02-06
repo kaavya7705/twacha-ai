@@ -3,9 +3,8 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { ArrowRight, Upload, Camera } from "lucide-react"
-import { ImageUploader } from "../components/image-uploader"
+import { ImageUploader } from "../app/components/image-uploader"
 
 export default function Home() {
   const [showUploader, setShowUploader] = useState(false)
@@ -26,9 +25,9 @@ export default function Home() {
                 your unique needs.
               </p>
               <div className="mt-8">
-                <Button size="lg" className="bg-pink-600 hover:bg-pink-700" onClick={() => setShowUploader(true)}>
+                <CustomButton size="lg" className="bg-pink-600 hover:bg-pink-700" onClick={() => setShowUploader(true)}>
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                </CustomButton>
               </div>
             </div>
             <div className="mt-10 lg:mt-0 lg:w-1/2">
@@ -66,7 +65,7 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">How It Works</h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {[
+            {[ 
               { title: "Upload Photo", icon: <Upload className="h-8 w-8 text-pink-500" /> },
               { title: "AI Analysis", icon: <Camera className="h-8 w-8 text-pink-500" /> },
               { title: "Get Recommendations", icon: <ArrowRight className="h-8 w-8 text-pink-500" /> },
@@ -88,3 +87,34 @@ export default function Home() {
   )
 }
 
+function CustomButton({
+  children,
+  onClick,
+  type = "button",
+  className,
+  size = "md"
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+  type?: "button" | "submit" | "reset"
+  className?: string
+  size?: "sm" | "md" | "lg"
+}) {
+  const sizeClasses = {
+    sm: "py-2 px-4 text-sm",
+    md: "py-3 px-6 text-base",
+    lg: "py-4 px-8 text-lg",
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      type={type}
+      className={`${
+        sizeClasses[size]
+      } ${className} bg-pink-600 text-white hover:bg-pink-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500`}
+    >
+      {children}
+    </button>
+  )
+}
