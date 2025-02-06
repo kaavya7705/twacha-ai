@@ -36,8 +36,8 @@ export default function Blog() {
             </div>
             <div className="card-footer flex justify-between items-center px-4 py-2 bg-gray-50">
               <span className="text-sm text-gray-500">{post.date}</span>
-              <Link href={`/blog/${post.id}`}>
-                <a className="text-pink-600 hover:underline">Read more</a>
+              <Link href={`/blog/${post.id}`} className="text-pink-600 hover:underline">
+                Read more
               </Link>
             </div>
           </div>
