@@ -1,88 +1,143 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import Image from "next/image"
-import { ArrowRight, Upload, Camera } from "lucide-react"
+import { ArrowRight, Upload, Camera, Sparkles } from "lucide-react"
 import { ImageUploader } from "../app/components/image-uploader"
 
 export default function Home() {
   const [showUploader, setShowUploader] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 overflow-hidden">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center lg:text-left lg:flex lg:items-center lg:justify-between">
-            <div className="lg:w-1/2">
-              <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block">Discover Your</span>
-                <span className="block text-pink-600">Perfect Skincare</span>
-              </h1>
-              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                Upload your photo and let our AI analyze your skin. Get personalized skincare recommendations based on
-                your unique needs.
-              </p>
-              <div className="mt-8">
-                <CustomButton size="lg" className="bg-pink-600 hover:bg-pink-700" onClick={() => setShowUploader(true)}>
+          <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
+            <div className="lg:w-1/2 space-y-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="relative"
+              >
+                <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl md:text-7xl">
+                  <span className="block">Discover Your</span>
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
+                    Perfect Skincare
+                  </span>
+                </h1>
+                <div className="absolute -top-10 -left-10 w-20 h-20 bg-yellow-300 rounded-full opacity-50 blur-xl"></div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-pink-300 rounded-full opacity-50 blur-xl"></div>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-xl text-gray-600 max-w-md"
+              >
+                Experience the future of skincare with our AI-powered analysis and personalized recommendations.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <CustomButton
+                  size="lg"
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300"
+                  onClick={() => setShowUploader(true)}
+                >
                   Get Started <ArrowRight className="ml-2 h-5 w-5" />
                 </CustomButton>
-              </div>
+              </motion.div>
             </div>
-            <div className="mt-10 lg:mt-0 lg:w-1/2">
-              <div className="relative mx-auto w-full max-w-md lg:max-w-full">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8 }}
-                  className="rounded-full overflow-hidden shadow-xl"
-                >
+            <div className="lg:w-1/2 mt-10 lg:mt-0">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full transform -rotate-6 scale-95 blur-2xl opacity-70"></div>
+                <div className="relative z-10">
                   <Image
-                    src="/placeholder.svg?height=400&width=400"
-                    alt="Face Analysis"
-                    width={400}
-                    height={400}
-                    className="w-full h-auto"
+                    src="/placeholder.svg?height=500&width=500"
+                    alt="Skincare Analysis"
+                    width={500}
+                    height={500}
+                    className="rounded-3xl shadow-2xl"
                   />
-                </motion.div>
+                </div>
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  className="absolute -bottom-6 -left-6 bg-white rounded-full shadow-xl p-4 flex items-center space-x-2"
                 >
-                  <p className="text-sm font-medium text-gray-900">AI-Powered Skin Analysis</p>
+                  <Sparkles className="text-yellow-500" />
+                  <p className="text-sm font-medium text-gray-900">AI-Powered Magic</p>
                 </motion.div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
+        {/* Background Elements */}
+        <div className="absolute top-1/4 left-0 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div className="absolute top-1/3 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-1/4 w-56 h-56 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">How It Works</h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {[ 
-              { title: "Upload Photo", icon: <Upload className="h-8 w-8 text-pink-500" /> },
-              { title: "AI Analysis", icon: <Camera className="h-8 w-8 text-pink-500" /> },
-              { title: "Get Recommendations", icon: <ArrowRight className="h-8 w-8 text-pink-500" /> },
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-white to-pink-100 transform -skew-y-6"></div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <h2 className="text-4xl font-extrabold text-center text-gray-900 sm:text-5xl mb-16">How It Works</h2>
+          <div className="grid gap-8 md:grid-cols-3 relative">
+            {[
+              {
+                title: "Upload Photo",
+                icon: <Upload className="h-8 w-8 text-pink-500" />,
+                description: "Securely upload your selfie",
+              },
+              {
+                title: "AI Analysis",
+                icon: <Camera className="h-8 w-8 text-purple-500" />,
+                description: "Our AI analyzes your skin",
+              },
+              {
+                title: "Get Recommendations",
+                icon: <ArrowRight className="h-8 w-8 text-yellow-500" />,
+                description: "Receive personalized skincare tips",
+              },
             ].map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="flex justify-center items-center w-16 h-16 mx-auto bg-pink-100 rounded-full">
-                  {step.icon}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                className="relative bg-white rounded-lg shadow-xl p-8 z-10 transform hover:scale-105 transition-all duration-300"
+              >
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-pink-200 to-purple-200 rounded-bl-full"></div>
+                <div className="relative z-10">
+                  <div className="flex justify-center items-center w-16 h-16 mx-auto bg-gradient-to-br from-pink-400 to-purple-400 rounded-full mb-6 text-white">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-gray-600">{step.description}</p>
                 </div>
-                <h3 className="mt-6 text-xl font-medium text-gray-900">{step.title}</h3>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
+        {/* Decorative Elements */}
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div className="absolute top-1/2 right-0 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
       </section>
 
       {/* Image Uploader Modal */}
-      <AnimatePresence>{showUploader && <ImageUploader onClose={() => setShowUploader(false)} />}</AnimatePresence>
+      {showUploader && <ImageUploader onClose={() => setShowUploader(false)} />}
     </div>
   )
 }
@@ -92,7 +147,7 @@ function CustomButton({
   onClick,
   type = "button",
   className,
-  size = "md"
+  size = "md",
 }: {
   children: React.ReactNode
   onClick?: () => void
@@ -112,9 +167,10 @@ function CustomButton({
       type={type}
       className={`${
         sizeClasses[size]
-      } ${className} bg-pink-600 text-white hover:bg-pink-700 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500`}
+      } ${className} text-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 shadow-lg`}
     >
       {children}
     </button>
   )
 }
+
