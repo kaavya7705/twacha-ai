@@ -33,27 +33,32 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
 
   const handleCapture = async () => {
     if (isCaptureMode && videoRef.current) {
-      const canvas = document.createElement("canvas")
-      canvas.width = videoRef.current.videoWidth
-      canvas.height = videoRef.current.videoHeight
-      canvas.getContext("2d")?.drawImage(videoRef.current, 0, 0)
-      const imageDataUrl = canvas.toDataURL("image/jpeg")
-      setImage(imageDataUrl)
-      setIsCaptureMode(false)
-      stopCamera()
+      const canvas = document.createElement("canvas");
+      const video = videoRef.current;
+  
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext("2d")?.drawImage(video, 0, 0);
+  
+      const imageDataUrl = canvas.toDataURL("image/jpeg"); // Convert to Base64
+      setImage(imageDataUrl);
+  
+      stopCamera();
+      setIsCaptureMode(false);
     } else {
-      setIsCaptureMode(true)
-      setImage(null)
+      setIsCaptureMode(true);
+      setImage(null);
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
-          videoRef.current.srcObject = stream
+          videoRef.current.srcObject = stream;
         }
       } catch (err) {
-        console.error("Error accessing camera:", err)
+        console.error("Error accessing camera:", err);
       }
     }
-  }
+  };
+  
 
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
@@ -71,12 +76,27 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
   const handleSubmit = async () => {
     if (image && age && gender) {
       const formData = new FormData();
-      formData.append("image", image);  // Ensure `image` is a File object
+  
+      if (image.startsWith("data:image")) {
+        // Convert Base64 to Blob
+        const byteCharacters = atob(image.split(",")[1]);
+        const byteArrays = [];
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteArrays.push(byteCharacters.charCodeAt(i));
+        }
+        const byteArray = new Uint8Array(byteArrays);
+        const blob = new Blob([byteArray], { type: "image/jpeg" });
+  
+        formData.append("image", blob, "captured.jpg");
+      } else {
+        formData.append("image", image); // If it's a file, append it directly
+      }
+  
       formData.append("age", age.toString());
       formData.append("gender", gender);
   
       try {
-        const response = await fetch("http://localhost:5000/upload", {
+        const response = await fetch("http://127.0.0.1:5000/upload", {
           method: "POST",
           body: formData,
         });
@@ -88,13 +108,14 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
         const result = await response.json();
         console.log("Server Response:", result);
   
-        onSubmit(result);  // Pass response data back to parent
+        onSubmit(result);
         onClose();
       } catch (error) {
         console.error("Error uploading data:", error);
       }
     }
   };
+  
   
 
   return (
