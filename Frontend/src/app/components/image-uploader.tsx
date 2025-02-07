@@ -4,10 +4,11 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { Upload, Camera, X } from "lucide-react"
+import AnalysisResult from "./AnalysisResult"
 
 interface ImageUploaderProps {
   onClose: () => void
-  onSubmit: (data: { image: string | null; age: string; gender: string }) => void
+  onSubmit: (data: { image: string | null; age: string; gender: string; imageUrl: string | null }) => void
 }
 
 export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
@@ -18,6 +19,8 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
   const [showAgeGender, setShowAgeGender] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [analysisResult, setAnalysisResult] = useState(null)
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -33,32 +36,31 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
 
   const handleCapture = async () => {
     if (isCaptureMode && videoRef.current) {
-      const canvas = document.createElement("canvas");
-      const video = videoRef.current;
-  
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d")?.drawImage(video, 0, 0);
-  
-      const imageDataUrl = canvas.toDataURL("image/jpeg"); // Convert to Base64
-      setImage(imageDataUrl);
-  
-      stopCamera();
-      setIsCaptureMode(false);
+      const canvas = document.createElement("canvas")
+      const video = videoRef.current
+
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      canvas.getContext("2d")?.drawImage(video, 0, 0)
+
+      const imageDataUrl = canvas.toDataURL("image/jpeg") // Convert to Base64
+      setImage(imageDataUrl)
+
+      stopCamera()
+      setIsCaptureMode(false)
     } else {
-      setIsCaptureMode(true);
-      setImage(null);
+      setIsCaptureMode(true)
+      setImage(null)
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          videoRef.current.srcObject = stream
         }
       } catch (err) {
-        console.error("Error accessing camera:", err);
+        console.error("Error accessing camera:", err)
       }
     }
-  };
-  
+  }
 
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
@@ -75,48 +77,53 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
 
   const handleSubmit = async () => {
     if (image && age && gender) {
-      const formData = new FormData();
-  
+      setIsLoading(true)
+      const formData = new FormData()
+
       if (image.startsWith("data:image")) {
-        // Convert Base64 to Blob
-        const byteCharacters = atob(image.split(",")[1]);
-        const byteArrays = [];
+        const byteCharacters = atob(image.split(",")[1])
+        const byteArrays = []
         for (let i = 0; i < byteCharacters.length; i++) {
-          byteArrays.push(byteCharacters.charCodeAt(i));
+          byteArrays.push(byteCharacters.charCodeAt(i))
         }
-        const byteArray = new Uint8Array(byteArrays);
-        const blob = new Blob([byteArray], { type: "image/jpeg" });
-  
-        formData.append("image", blob, "captured.jpg");
+        const byteArray = new Uint8Array(byteArrays)
+        const blob = new Blob([byteArray], { type: "image/jpeg" })
+
+        formData.append("image", blob, "captured.jpg")
       } else {
-        formData.append("image", image); // If it's a file, append it directly
+        formData.append("image", image)
       }
-  
-      formData.append("age", age.toString());
-      formData.append("gender", gender);
-  
+
+      formData.append("age", age.toString())
+      formData.append("gender", gender)
+
       try {
         const response = await fetch("http://127.0.0.1:5000/upload", {
           method: "POST",
           body: formData,
-        });
-  
+        })
+
         if (!response.ok) {
-          throw new Error("Failed to upload data");
+          throw new Error("Failed to upload data")
         }
-  
-        const result = await response.json();
-        console.log("Server Response:", result);
-  
-        onSubmit(result);
-        onClose();
+
+        const result = await response.json()
+        console.log("Server Response:", result)
+
+        // Include the image URL in the analysis results
+        const analysisResults = {
+          ...result,
+          imageUrl: image,
+        }
+
+        onSubmit(analysisResults)
       } catch (error) {
-        console.error("Error uploading data:", error);
+        console.error("Error uploading data:", error)
+      } finally {
+        setIsLoading(false)
       }
     }
-  };
-  
-  
+  }
 
   return (
     <motion.div
@@ -249,6 +256,16 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
               </button>
             </div>
           </div>
+        )}
+        {(isLoading || analysisResult) && (
+          <AnalysisResult
+            isLoading={isLoading}
+            result={analysisResult}
+            onClose={() => {
+              setAnalysisResult(null)
+              onClose()
+            }}
+          />
         )}
       </motion.div>
     </motion.div>

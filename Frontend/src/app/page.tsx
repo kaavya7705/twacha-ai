@@ -5,9 +5,40 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { ArrowRight, Upload, Camera, Sparkles } from "lucide-react"
 import { ImageUploader } from "../app/components/image-uploader"
+import AnalysisResultsPage from "../app/components/AnalysisResultsPage";
 
+interface AnalysisResults {
+  imageUrl: string
+  results: Array<{
+    class: number
+    confidence: number
+    problem: string
+    x1: number
+    y1: number
+    x2: number
+    y2: number
+  }>
+  predictedProblems: string[]
+  recommendations: string
+}
 export default function Home() {
+  // const [showUploader, setShowUploader] = useState(false)
   const [showUploader, setShowUploader] = useState(false)
+  const [analysisResults, setAnalysisResults] = useState<AnalysisResults | null>(null)
+
+  const handleAnalysisComplete = (results: any) => {
+    setAnalysisResults({
+      imageUrl: results.imageUrl || "/placeholder.svg",
+      results: results.results || [],
+      predictedProblems: results.predicted_problems || [], // Fix property name
+      recommendations: results.recommendations || "",
+    })
+    setShowUploader(false)
+  }
+
+  if (analysisResults) {
+    return <AnalysisResultsPage {...analysisResults} />
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 overflow-hidden">
@@ -51,6 +82,7 @@ export default function Home() {
                 >
                   Get Started  <ArrowRight className="ml-2 h-5 w-5" />
                 </CustomButton>
+                
               </motion.div>
             </div>
             <div className="lg:w-1/2 mt-10 lg:mt-0">
@@ -137,11 +169,8 @@ export default function Home() {
       </section>
 
       {/* Image Uploader Modal */}
-      {showUploader && <ImageUploader
-        onClose={() => setShowUploader(false)}
-        onSubmit={(data) => console.log("Submitted Data:", data)}
-      />
-      }
+      {showUploader && <ImageUploader onClose={() => setShowUploader(false)} onSubmit={handleAnalysisComplete} />}
+      
     </div>
   )
 }
