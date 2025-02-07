@@ -46,10 +46,10 @@ export default function Home() {
               >
                 <CustomButton
                   size="lg"
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300"
+                  className="w-200 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300"
                   onClick={() => setShowUploader(true)}
                 >
-                  Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                  Get Started  <ArrowRight className="ml-2 h-5 w-5" />
                 </CustomButton>
               </motion.div>
             </div>
