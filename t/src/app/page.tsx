@@ -137,7 +137,11 @@ export default function Home() {
       </section>
 
       {/* Image Uploader Modal */}
-      {showUploader && <ImageUploader onClose={() => setShowUploader(false)} />}
+      {showUploader && <ImageUploader
+        onClose={() => setShowUploader(false)}
+        onSubmit={(data) => console.log("Submitted Data:", data)}
+      />
+      }
     </div>
   )
 }
@@ -165,9 +169,8 @@ function CustomButton({
     <button
       onClick={onClick}
       type={type}
-      className={`${
-        sizeClasses[size]
-      } ${className} text-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 shadow-lg`}
+      className={`${sizeClasses[size]
+        } ${className} text-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 shadow-lg`}
     >
       {children}
     </button>
