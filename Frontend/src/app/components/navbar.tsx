@@ -14,7 +14,7 @@ export function Navbar() {
         <div className="flex justify-around gap-60 h-16">
           <div className="flex">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-pink-600">Twacha-Ai</span>
+              <span className="text-2xl font-bold text-pink-600 font-sarina">Twacha-Ai</span>
             </Link>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:space-x-20">
