@@ -28,6 +28,12 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
   predictedProblems,
   recommendations,
 }) => {
+  // Filter results to include only unique problems
+  const uniqueResults = results.filter(
+    (result, index, self) =>
+      index === self.findIndex((r) => r.problem === result.problem)
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-100 to-white flex flex-col items-center">
       <motion.h1
@@ -56,22 +62,29 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
               className="rounded-lg shadow-lg"
             />
             {results.length > 0 &&
-              results.map((result, index) => (
-                <div
-                  key={index}
-                  className="absolute border-2 border-pink-500 rounded"
-                  style={{
-                    left: `${(result.x1 / 600) * 100}%`,
-                    top: `${(result.y1 / 600) * 100}%`,
-                    width: `${((result.x2 - result.x1) / 600) * 100}%`,
-                    height: `${((result.y2 - result.y1) / 600) * 100}%`,
-                  }}
-                >
-                  <span className="absolute top-0 left-0 bg-pink-500 text-white text-xs px-1 rounded-br">
-                    {result.problem}
-                  </span>
-                </div>
-              ))}
+              results.map((result, index) => {
+                const centerX = (result.x1 + result.x2) / 2;
+                const centerY = (result.y1 + result.y2) / 2;
+                return (
+                  <div
+                    key={index}
+                    className="absolute"
+                    style={{
+                      left: `${(centerX / 600) * 100}%`,
+                      top: `${(centerY / 600) * 100}%`,
+                      transform: "translate(-100%, 400%)",
+                    }}
+                  >
+                    <div className="relative group">
+                      <div className="w-3 h-3 bg-white rounded-full border-2 border-pink-500"></div>
+                      <div className="absolute left-8 top-1/2 transform -translate-y-1/2 scale-0 group-hover:scale-100 transition-transform bg-white border border-pink-500 p-2 rounded z-10 whitespace-nowrap">
+                        {result.problem} -{" "}
+                        {(result.confidence * 100).toFixed(0)}%
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         </motion.div>
 
@@ -88,7 +101,7 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
 
           {predictedProblems.length > 0 ? (
             <div className="grid grid-cols-2 gap-4">
-              {results.map((result, index) => (
+              {uniqueResults.map((result, index) => (
                 <div key={index} className="flex flex-col items-center">
                   <div className="w-24 h-24 mb-2">
                     <CircularProgressbar
