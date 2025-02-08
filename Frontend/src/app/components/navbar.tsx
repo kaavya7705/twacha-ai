@@ -11,16 +11,16 @@ export function Navbar() {
   return (
     <nav className="bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-around gap-60 h-16">
           <div className="flex">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-pink-600">Face Health</span>
+              <span className="text-2xl font-bold text-pink-600">Twacha-Ai</span>
             </Link>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <div className="hidden sm:ml-6 sm:flex sm:space-x-20">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/about">About</NavLink>
-            <NavLink href="/services">Services</NavLink>
+            {/* <NavLink href="/services">Services</NavLink> */}
             <NavLink href="/blog">Blog</NavLink>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -41,7 +41,7 @@ export function Navbar() {
           <div className="pt-2 pb-3 space-y-1">
             <MobileNavLink href="/">Home</MobileNavLink>
             <MobileNavLink href="/about">About</MobileNavLink>
-            <MobileNavLink href="/services">Services</MobileNavLink>
+            {/* <MobileNavLink href="/services">Services</MobileNavLink> */}
             <MobileNavLink href="/blog">Blog</MobileNavLink>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">

@@ -9,6 +9,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import "react-circular-progressbar/dist/styles.css"
 import { jsPDF } from "jspdf"
 import html2canvas from "html2canvas"
+import { Navbar } from "./navbar"
 
 interface AnalysisResultsPageProps {
   imageUrl: string
@@ -77,6 +78,7 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-100 to-white flex flex-col items-center">
+      
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -104,7 +106,7 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
             />
           </div>
         </motion.div>
-
+        
         {/* Analysis Details Section */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}

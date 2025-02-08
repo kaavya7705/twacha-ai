@@ -6,6 +6,7 @@ import Image from "next/image"
 import { ArrowRight, Upload, Camera, Sparkles } from "lucide-react"
 import { ImageUploader } from "../app/components/image-uploader"
 import AnalysisResultsPage from "../app/components/AnalysisResultsPage";
+import { Navbar } from "./components/navbar"
 
 interface AnalysisResults {
   imageUrl: string
@@ -43,6 +44,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-100 overflow-hidden">
       {/* Hero Section */}
+      
       <section className="relative py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
@@ -80,7 +82,7 @@ export default function Home() {
                   className="w-200 flex justify-center bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300"
                   onClick={() => setShowUploader(true)}
                 >
-                  Get Started  <ArrowRight className="ml-2 h-5 w-5" />
+                  Get Started  <ArrowRight className="m-auto h-5 w-5 ml-2" />
                 </CustomButton>
                 
               </motion.div>
@@ -130,17 +132,17 @@ export default function Home() {
             {[
               {
                 title: "Upload Photo",
-                icon: <Upload className="h-8 w-8 text-pink-500" />,
+                icon: <Upload className="h-8 w-8 text-white" />,
                 description: "Securely upload your selfie",
               },
               {
                 title: "AI Analysis",
-                icon: <Camera className="h-8 w-8 text-purple-500" />,
+                icon: <Camera className="h-8 w-8 text-white" />,
                 description: "Our AI analyzes your skin",
               },
               {
                 title: "Get Recommendations",
-                icon: <ArrowRight className="h-8 w-8 text-yellow-500" />,
+                icon: <ArrowRight className="h-8 w-8 text-white" />,
                 description: "Receive personalized skincare tips",
               },
             ].map((step, index) => (
