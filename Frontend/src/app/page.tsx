@@ -77,7 +77,7 @@ export default function Home() {
               >
                 <CustomButton
                   size="lg"
-                  className="w-200 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300"
+                  className="w-200 flex justify-center bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300"
                   onClick={() => setShowUploader(true)}
                 >
                   Get Started  <ArrowRight className="ml-2 h-5 w-5" />
@@ -95,7 +95,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full transform -rotate-6 scale-95 blur-2xl opacity-70"></div>
                 <div className="relative z-10">
                   <Image
-                    src="/placeholder.svg?height=500&width=500"
+                    src="/Girl.png"
                     alt="Skincare Analysis"
                     width={500}
                     height={500}
@@ -106,10 +106,10 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
-                  className="absolute -bottom-6 -left-6 bg-white rounded-full shadow-xl p-4 flex items-center space-x-2"
+                  className="absolute -bottom-6 -left-6 bg-white z-10 opacity-75 rounded-full shadow-xl p-4 flex items-center space-x-2"
                 >
                   <Sparkles className="text-yellow-500" />
-                  <p className="text-sm font-medium text-gray-900">AI-Powered Magic</p>
+                  <p className="text-sm z-20 font-medium text-gray-900">AI-Powered Magic</p>
                 </motion.div>
               </motion.div>
             </div>
