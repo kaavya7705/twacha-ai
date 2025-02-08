@@ -94,7 +94,7 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
           transition={{ duration: 0.5, delay: 0.2 }}
           className="relative flex justify-center"
         >
-          <div className="relative w-[600px] h-[600px]">
+          <div className="relative w-[400px] h-[400px]">
             <Image
               src={imageUrl || "/placeholder.svg"}
               alt="Analyzed Skin"
@@ -102,29 +102,6 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
               objectFit="cover"
               className="rounded-lg shadow-lg"
             />
-            {results.length > 0 &&
-              results.map((result, index) => {
-                const centerX = (result.x1 + result.x2) / 2
-                const centerY = (result.y1 + result.y2) / 2
-                return (
-                  <div
-                    key={index}
-                    className="absolute"
-                    style={{
-                      left: `${(centerX / 600) * 100}%`,
-                      top: `${(centerY / 600) * 100}%`,
-                      transform: "translate(-100%, 400%)",
-                    }}
-                  >
-                    <div className="relative group">
-                      <div className="w-3 h-3 bg-white rounded-full border-2 border-pink-500"></div>
-                      <div className="absolute left-8 top-1/2 transform -translate-y-1/2 scale-0 group-hover:scale-100 transition-transform bg-white border border-pink-500 p-2 rounded z-10 whitespace-nowrap">
-                        {result.problem} - {(result.confidence * 100).toFixed(0)}%
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
           </div>
         </motion.div>
 
@@ -189,7 +166,7 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
           )}
         </div>
 
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex justify-end p-6">
           <CustomButton onClick={downloadPDF}>Download Recommendations as PDF</CustomButton>
         </div>
       </motion.div>
