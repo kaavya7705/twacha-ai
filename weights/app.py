@@ -83,6 +83,8 @@ def upload():
         image = request.files.get("image")
         image_url = request.form.get("imageURL")
         image_path = None
+        age = request.form.get("age")
+        gender = request.form.get("gender")
 
         if image:
             image_path = os.path.join(UPLOAD_FOLDER, image.filename)
@@ -98,7 +100,7 @@ def upload():
                 return jsonify({"error": f"Failed to fetch image from URL: {e}"}), 400
         else:
             return jsonify({"error": "No image provided"}), 400
-
+        
         if not model:
             return jsonify({"error": "YOLO model failed to load"}), 500
 
@@ -139,9 +141,10 @@ def upload():
         predicted_problems = list(set(predicted_problems))
         # Craft a prompt for the GROQ API with the predicted problems
         prompt = (
-            f"Based on the following predicted skin issues: {predicted_problems}, "
+            f"Based on the following predicted skin issues and the discription of the user: {predicted_problems},User's : Age {age} Gender {gender} "
             "please provide recommended medication and a daily routine to follow for these conditions. "
             "Include detailed steps and suggestions. (Note: This is experimental advice and not a substitute for professional medical guidance.)"
+            "Be more human like dont use works like user, assist, that feels more robotic"
         )
 
         groq_response = send_to_groq(prompt)
