@@ -26,7 +26,7 @@ export default function About() {
             <div className="md:w-1/2">
               <div className="relative h-64 w-full md:h-96 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
                 <Image
-                  src="/placeholder.svg?height=600&width=800"
+                  src="/dyku6ejz.png"
                   alt="Twacha AI Team"
                   layout="fill"
                   objectFit="cover"
