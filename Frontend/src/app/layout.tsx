@@ -8,7 +8,7 @@ import type React from "react" // Import React
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Face Health",
+  title: "Twacha_Ai",
   description: "Your journey to radiant skin starts here",
 }
 
