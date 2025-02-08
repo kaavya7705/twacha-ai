@@ -1,6 +1,6 @@
 # Ignore uploaded files
 /uploads
-
+my.txt
 # Ignore environment variables
 .env
 
