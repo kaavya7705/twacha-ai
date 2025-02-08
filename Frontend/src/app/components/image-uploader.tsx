@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
-import { Upload, Camera, X } from "lucide-react"
+import { Upload, Camera, X, Sun } from "lucide-react"
 import AnalysisResult from "./AnalysisResult"
 
 interface ImageUploaderProps {
@@ -43,7 +43,7 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
       canvas.height = video.videoHeight
       canvas.getContext("2d")?.drawImage(video, 0, 0)
 
-      const imageDataUrl = canvas.toDataURL("image/jpeg") // Convert to Base64
+      const imageDataUrl = canvas.toDataURL("image/jpeg")
       setImage(imageDataUrl)
 
       stopCamera()
@@ -110,7 +110,6 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
         const result = await response.json()
         console.log("Server Response:", result)
 
-        // Include the image URL in the analysis results
         const analysisResults = {
           ...result,
           imageUrl: image,
@@ -136,11 +135,11 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-lg p-6 max-w-md w-full"
+        className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-pink-700">Upload Your Photo</h2>
-          <button onClick={onClose} className="text-pink-500 hover:text-pink-700">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-pink-700">Upload Your Photo</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 transition-colors">
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -148,27 +147,32 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
         {!showAgeGender ? (
           <>
             {image ? (
-              <div className="mb-4">
-                <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-pink-200">
+              <div className="mb-6">
+                <div className="w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-pink-200 shadow-lg">
                   <img src={image || "/placeholder.svg"} alt="Uploaded" className="w-full h-full object-cover" />
                 </div>
               </div>
             ) : isCaptureMode ? (
-              <div className="mb-4">
-                <video ref={videoRef} autoPlay className="w-full rounded-lg border-4 border-pink-200" />
+              <div className="mb-6">
+                <video ref={videoRef} autoPlay className="w-full rounded-lg border-4 border-pink-200 shadow-lg" />
               </div>
             ) : (
-              <div className="mb-4 border-2 border-dashed border-pink-300 rounded-lg p-4 text-center">
-                <p className="text-pink-500">Upload or capture your photo</p>
+              <div className="mb-6 border-2 border-dashed border-pink-300 rounded-lg p-8 text-center bg-pink-50">
+                <Sun className="w-16 h-16 text-pink-400 mx-auto mb-4" />
+                <p className="text-pink-600 font-medium">
+                  Upload or capture your photo in a well-lit area for more accurate results
+                </p>
               </div>
             )}
 
-            <div className="flex justify-center space-x-4 mb-4">
+            <div className="flex justify-center space-x-4 mb-6">
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isCaptureMode}
-                className={`inline-flex items-center px-4 py-2 rounded-md text-white ${
-                  isCaptureMode ? "bg-pink-300 cursor-not-allowed" : "bg-pink-500 hover:bg-pink-600"
+                className={`flex items-center px-6 py-3 rounded-full text-white font-medium transition-all ${
+                  isCaptureMode
+                    ? "bg-pink-300 cursor-not-allowed"
+                    : "bg-pink-500 hover:bg-pink-600 shadow-md hover:shadow-lg"
                 }`}
               >
                 <Upload className="h-5 w-5 mr-2" />
@@ -178,8 +182,10 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
               <button
                 onClick={handleCapture}
                 disabled={!!image && !isCaptureMode}
-                className={`inline-flex items-center px-4 py-2 rounded-md text-white ${
-                  !!image && !isCaptureMode ? "bg-pink-300 cursor-not-allowed" : "bg-pink-500 hover:bg-pink-600"
+                className={`flex items-center px-6 py-3 rounded-full text-white font-medium transition-all ${
+                  !!image && !isCaptureMode
+                    ? "bg-pink-300 cursor-not-allowed"
+                    : "bg-pink-500 hover:bg-pink-600 shadow-md hover:shadow-lg"
                 }`}
               >
                 <Camera className="h-5 w-5 mr-2" />
@@ -191,13 +197,13 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
               <div className="flex justify-end space-x-4">
                 <button
                   onClick={() => setImage(null)}
-                  className="px-4 py-2 border border-pink-500 text-pink-500 rounded-md hover:bg-pink-50"
+                  className="px-6 py-3 border-2 border-pink-500 text-pink-500 rounded-full font-medium hover:bg-pink-50 transition-colors"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleContinue}
-                  className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600"
+                  className="px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors shadow-md hover:shadow-lg"
                 >
                   Continue
                 </button>
@@ -205,9 +211,9 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
             )}
           </>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
-              <label htmlFor="age" className="block text-sm font-medium text-pink-700">
+              <label htmlFor="age" className="block text-sm font-medium text-pink-700 mb-2">
                 Age
               </label>
               <input
@@ -216,24 +222,31 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="Enter your age"
-                className="mt-1 block w-full px-3 py-2 bg-white border border-pink-300 rounded-md text-sm shadow-sm placeholder-pink-400
-                          focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
+                className="w-full px-4 py-3 bg-pink-50 border border-pink-300 rounded-lg text-pink-700 placeholder-pink-400
+                          focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all"
               />
             </div>
             <div>
-              <span className="block text-sm font-medium text-pink-700">Gender</span>
-              <div className="mt-2 space-y-2">
+              <span className="block text-sm font-medium text-pink-700 mb-2">Gender</span>
+              <div className="grid grid-cols-3 gap-4">
                 {["Male", "Female", "Other"].map((option) => (
-                  <label key={option} className="inline-flex items-center">
+                  <label
+                    key={option}
+                    className="flex items-center justify-center p-3 bg-pink-50 border border-pink-300 rounded-lg cursor-pointer transition-all hover:bg-pink-100"
+                  >
                     <input
                       type="radio"
-                      className="form-radio text-pink-600"
+                      className="sr-only"
                       name="gender"
                       value={option.toLowerCase()}
                       checked={gender === option.toLowerCase()}
                       onChange={(e) => setGender(e.target.value)}
                     />
-                    <span className="ml-2 text-pink-700">{option}</span>
+                    <span
+                      className={`text-sm font-medium ${gender === option.toLowerCase() ? "text-pink-700" : "text-pink-500"}`}
+                    >
+                      {option}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -241,15 +254,17 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setShowAgeGender(false)}
-                className="px-4 py-2 border border-pink-500 text-pink-500 rounded-md hover:bg-pink-50"
+                className="px-6 py-3 border-2 border-pink-500 text-pink-500 rounded-full font-medium hover:bg-pink-50 transition-colors"
               >
                 Back
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={!age || !gender}
-                className={`px-4 py-2 rounded-md text-white ${
-                  !age || !gender ? "bg-pink-300 cursor-not-allowed" : "bg-pink-500 hover:bg-pink-600"
+                className={`px-6 py-3 rounded-full text-white font-medium transition-all ${
+                  !age || !gender
+                    ? "bg-pink-300 cursor-not-allowed"
+                    : "bg-pink-500 hover:bg-pink-600 shadow-md hover:shadow-lg"
                 }`}
               >
                 Submit

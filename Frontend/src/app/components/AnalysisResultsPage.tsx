@@ -1,25 +1,28 @@
-"use client";
+"use client"
 
-import type React from "react";
-import Image from "next/image";
-import ReactMarkdown from "react-markdown";
-import { motion } from "framer-motion";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
+import type React from "react"
+import { useRef } from "react"
+import Image from "next/image"
+import ReactMarkdown from "react-markdown"
+import { motion } from "framer-motion"
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
+import "react-circular-progressbar/dist/styles.css"
+import { jsPDF } from "jspdf"
+import html2canvas from "html2canvas"
 
 interface AnalysisResultsPageProps {
-  imageUrl: string;
+  imageUrl: string
   results: Array<{
-    class: number;
-    confidence: number;
-    problem: string;
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  }>;
-  predictedProblems: string[];
-  recommendations: string;
+    class: number
+    confidence: number
+    problem: string
+    x1: number
+    y1: number
+    x2: number
+    y2: number
+  }>
+  predictedProblems: string[]
+  recommendations: string
 }
 
 const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
@@ -28,11 +31,49 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
   predictedProblems,
   recommendations,
 }) => {
+  const recommendationsRef = useRef<HTMLDivElement>(null)
+
+  // Custom Button Component
+  const CustomButton: React.FC<{ onClick: () => void; children: React.ReactNode }> = ({ onClick, children }) => (
+    <button
+      onClick={onClick}
+      className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-all"
+    >
+      {children}
+    </button>
+  )
+
   // Filter results to include only unique problems
   const uniqueResults = results.filter(
-    (result, index, self) =>
-      index === self.findIndex((r) => r.problem === result.problem)
-  );
+    (result, index, self) => index === self.findIndex((r) => r.problem === result.problem),
+  )
+
+  const downloadPDF = async () => {
+    if (recommendationsRef.current) {
+      const element = recommendationsRef.current;
+      const canvas = await html2canvas(element, {scrollY: -window.scrollY});
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+      
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
+      
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
+      }
+      
+      pdf.save("skin_analysis_recommendations.pdf");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-100 to-white flex flex-col items-center">
@@ -63,8 +104,8 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
             />
             {results.length > 0 &&
               results.map((result, index) => {
-                const centerX = (result.x1 + result.x2) / 2;
-                const centerY = (result.y1 + result.y2) / 2;
+                const centerX = (result.x1 + result.x2) / 2
+                const centerY = (result.y1 + result.y2) / 2
                 return (
                   <div
                     key={index}
@@ -78,12 +119,11 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
                     <div className="relative group">
                       <div className="w-3 h-3 bg-white rounded-full border-2 border-pink-500"></div>
                       <div className="absolute left-8 top-1/2 transform -translate-y-1/2 scale-0 group-hover:scale-100 transition-transform bg-white border border-pink-500 p-2 rounded z-10 whitespace-nowrap">
-                        {result.problem} -{" "}
-                        {(result.confidence * 100).toFixed(0)}%
+                        {result.problem} - {(result.confidence * 100).toFixed(0)}%
                       </div>
                     </div>
                   </div>
-                );
+                )
               })}
           </div>
         </motion.div>
@@ -95,9 +135,7 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
           transition={{ duration: 0.5, delay: 0.4 }}
           className="space-y-6"
         >
-          <h2 className="text-2xl font-semibold text-pink-600 mb-4">
-            Detected Issues
-          </h2>
+          <h2 className="text-2xl font-semibold text-pink-600 mb-4">Detected Issues</h2>
 
           {predictedProblems.length > 0 ? (
             <div className="grid grid-cols-2 gap-4">
@@ -105,19 +143,17 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
                 <div key={index} className="flex flex-col items-center">
                   <div className="w-24 h-24 mb-2">
                     <CircularProgressbar
-                      value={result.confidence * 100} // Uses actual confidence instead of random %
-                      text={`${result.problem}`}
+                      value={result.confidence * 100}
+                      text={`${(result.confidence * 100).toFixed(0)}%`}
                       styles={buildStyles({
-                        textSize: "12px",
+                        textSize: "24px",
                         pathColor: "#FF69B4",
                         textColor: "#FF69B4",
                         trailColor: "#FFF0F5",
                       })}
                     />
                   </div>
-                  <span className="text-sm text-pink-700 text-center">
-                    {result.problem}
-                  </span>
+                  <span className="text-sm text-pink-700 text-center">{result.problem}</span>
                 </div>
               ))}
             </div>
@@ -134,21 +170,31 @@ const AnalysisResultsPage: React.FC<AnalysisResultsPageProps> = ({
         transition={{ duration: 0.5, delay: 0.6 }}
         className="max-w-4xl w-full mt-12 px-4"
       >
-        <h2 className="text-2xl font-semibold text-pink-600 mb-4">
-          Recommendations
-        </h2>
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <h2 className="text-2xl font-semibold text-pink-600 mb-4">Recommendations</h2>
+
+        <div ref={recommendationsRef} className="bg-white rounded-lg shadow-lg p-6 w-full mx-auto">
           {recommendations ? (
-            <ReactMarkdown className="prose prose-pink max-w-none">
+            <ReactMarkdown
+              className="prose prose-pink max-w-none"
+              components={{
+                ul: ({ node, ...props }) => <ul className="list-disc pl-6" {...props} />,
+                ol: ({ node, ...props }) => <ol className="list-decimal pl-6" {...props} />,
+                p: ({ node, ...props }) => <p className="mb-4" {...props} />, // Keep proper paragraph spacing
+              }}
+            >
               {recommendations}
             </ReactMarkdown>
           ) : (
             <p className="text-gray-500">No recommendations available.</p>
           )}
         </div>
+
+        <div className="mt-4 flex justify-end">
+          <CustomButton onClick={downloadPDF}>Download Recommendations as PDF</CustomButton>
+        </div>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default AnalysisResultsPage;
+export default AnalysisResultsPage
