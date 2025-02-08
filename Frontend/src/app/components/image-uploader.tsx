@@ -232,7 +232,7 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
                 {["Male", "Female", "Other"].map((option) => (
                   <label
                     key={option}
-                    className="flex items-center justify-center p-3 bg-pink-50 border border-pink-300 rounded-lg cursor-pointer transition-all hover:bg-pink-100"
+                    className={`flex items-center justify-center p-3 bg-pink-50 border border-pink-300 rounded-lg cursor-pointer transition-all hover:bg-pink-900 hover:text-white ${gender === option.toLowerCase() ? "text-white bg-pink-900 hover:text-white" : "text-pink-500 hover:text-white"}`}
                   >
                     <input
                       type="radio"
@@ -243,7 +243,7 @@ export function ImageUploader({ onClose, onSubmit }: ImageUploaderProps) {
                       onChange={(e) => setGender(e.target.value)}
                     />
                     <span
-                      className={`text-sm font-medium ${gender === option.toLowerCase() ? "text-pink-700" : "text-pink-500"}`}
+                      className={`text-sm font-medium ${gender === option.toLowerCase() ? "text-white  " : " hover:text-white"}`}
                     >
                       {option}
                     </span>
