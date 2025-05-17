@@ -4,7 +4,7 @@ Twacha AI is an innovative project built for hackathons that leverages the power
 
 ## Overview
 
-During hackathons, rapid prototyping and creative ideas are key. Twacha AI aims to provide a quick and robust solution for computer vision tasks. Whether you're looking to create interactive demos or solve real-world problems using AI, this project provides an excellent starting point.
+During hackathons, rapid prototyping and creative ideas are key. Twacha AI aims to provide a rapid and robust solution for computer vision tasks. Whether you're looking to create interactive demos or solve real-world problems using AI, this project provides an excellent starting point.
 
 ## Features
 
